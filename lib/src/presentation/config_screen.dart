@@ -29,14 +29,24 @@ class ConfigScreen extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              if (isFirtTime)
-                TextFieldSection(
-                  controller: controller.passwordController,
-                  label: "Contraseña Maestra",
-                  hint: "Digite la contraseña Maestra",
-                  validator: (value) => TValidator.validatePassword(value),
-                  inputType: TextInputType.visiblePassword,
-                ),
+              TextFieldSection(
+                controller: controller.userController,
+                label: "Nombre de Usuario",
+                hint: "Digite la nombre de usuario",
+                validator: (value) =>
+                    TValidator.validateEmptyText('nombre de usuario', value),
+                inputType: TextInputType.visiblePassword,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              TextFieldSection(
+                controller: controller.passwordController,
+                label: "Contraseña Maestra",
+                hint: "Digite la contraseña Maestra",
+                validator: (value) => TValidator.validatePassword(value),
+                inputType: TextInputType.visiblePassword,
+              ),
               SizedBox(
                 height: isFirtTime ? 40 : 20,
               ),

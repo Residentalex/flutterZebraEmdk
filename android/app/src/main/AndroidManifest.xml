@@ -14,8 +14,8 @@
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
     <application
-        android:label="flutter_zebra_emdk"
-        android:icon="@mipmap/ic_launcher">
+        android:label="CkeckPrice"
+        android:icon="@mipmap/launcher_icon">
         <uses-library android:name="com.symbol.emdk"/>
         <meta-data
             android:name="flutterEmbedding"

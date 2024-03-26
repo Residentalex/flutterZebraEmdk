@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     product = ProductModel(name: '');
                   }
 
-                  return product.name == ''
+                  return (product.name == '')
                       ? Obx(
                           () => Image(
                               image: NetworkImage(

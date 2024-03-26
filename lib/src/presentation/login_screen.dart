@@ -25,7 +25,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlutterLogin(
       onSignup: _signupUser,
-      savedEmail: "admin",
+      savedEmail: controller.userController.text,
       onLogin: controller.authUser,
       onRecoverPassword: _recoverPassword,
       userValidator: (value) {

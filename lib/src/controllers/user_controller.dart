@@ -14,11 +14,14 @@ class AuthenticationController extends GetxController {
   var userRepository = UserRepository.instance;
   TextEditingController tokenController = TextEditingController();
   TextEditingController urlController = TextEditingController();
+  TextEditingController userController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController imageController = TextEditingController();
 
   @override
   void onReady() {
+    userController.text = localStorage.read('USERNAME') ?? '';
+    passwordController.text = localStorage.read('PASSWORD') ?? '';
     tokenController.text = localStorage.read('TOKEN') ?? '';
     urlController.text = localStorage.read('APIURL') ?? '';
   }
@@ -42,13 +45,11 @@ class AuthenticationController extends GetxController {
 
   void setConfig() {
     try {
-      bool isFirstTime = localStorage.read('ISFIRSTTIME') ?? true;
-
-      if (isFirstTime) localStorage.write('PASSWORD', passwordController.text);
+      localStorage.write('PASSWORD', passwordController.text);
 
       localStorage.write('TOKEN', tokenController.text);
       localStorage.write('APIURL', urlController.text);
-      localStorage.write('USERNAME', 'admin');
+      localStorage.write('USERNAME', userController.text);
       localStorage.write('ISFIRSTTIME', false);
       localStorage.save();
 
