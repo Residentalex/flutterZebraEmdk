@@ -10,7 +10,11 @@ class TCloudHelperFunctions {
   /// Otherwise, it returns null.
   static Widget? checkSingleRecordState<T>(AsyncSnapshot<T> snapshot) {
     if (snapshot.connectionState == ConnectionState.waiting) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+          child: CircularProgressIndicator(
+        color: Colors.red,
+        strokeWidth: 60,
+      ));
     }
 
     if (!snapshot.hasData || snapshot.data == null) {
