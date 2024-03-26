@@ -95,44 +95,67 @@ class _HomeScreenState extends State<HomeScreen> {
                     product = ProductModel(name: '');
                   }
 
-                  return Center(
-                    child: new Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        new Text(
-                          product.name!,
-                          style: GoogleFonts.raleway(
-                            textStyle: const TextStyle(
-                              fontSize: 42,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(
-                          height: 40,
-                        ),
-                        Container(
-                          child: _barcodeRead.isEmpty || product.code == null
-                              ? null
-                              : Text(
-                                  TFormarter.moneyToString(
-                                      money: product.price, simbol: 'RD\$'),
-                                  style: GoogleFonts.nunito(
-                                    textStyle: const TextStyle(
-                                      fontSize: 72,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                ),
-                        ),
-                      ],
-                    ),
-                  );
+                  return product.name == ''
+                      ? Obx(
+                          () => Image(
+                              image: NetworkImage(
+                                  companyController.imageUrl.value)),
+                        )
+                      : Checker(product: product, barcodeRead: _barcodeRead);
                 }),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class Checker extends StatelessWidget {
+  const Checker({
+    Key? key,
+    required this.product,
+    required String barcodeRead,
+  })  : _barcodeRead = barcodeRead,
+        super(key: key);
+
+  final ProductModel product;
+  final String _barcodeRead;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: new Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Text(
+            product.name!,
+            style: GoogleFonts.raleway(
+              textStyle: const TextStyle(
+                fontSize: 42,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(
+            height: 40,
+          ),
+          Container(
+            child: _barcodeRead.isEmpty || product.code == null
+                ? null
+                : Text(
+                    TFormarter.moneyToString(
+                        money: product.price, simbol: 'RD\$'),
+                    style: GoogleFonts.nunito(
+                      textStyle: const TextStyle(
+                        fontSize: 72,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+          ),
+        ],
       ),
     );
   }

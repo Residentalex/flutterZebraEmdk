@@ -13,7 +13,6 @@ class TCloudHelperFunctions {
       return const Center(
           child: CircularProgressIndicator(
         color: Colors.red,
-        strokeWidth: 60,
       ));
     }
 

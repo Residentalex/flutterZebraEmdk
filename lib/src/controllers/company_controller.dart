@@ -8,12 +8,13 @@ class CompanyController extends GetxController {
 
   final localStorage = GetStorage();
   final companyRepository = Get.put(CompanyRepository());
-  String imageUrl = '';
+
+  RxString imageUrl = ''.obs;
 
   @override
   void onInit() async {
     var company = await getCompany();
-    imageUrl = company.bgImage!;
+    imageUrl.value = company.bgImage!;
     super.onInit();
   }
 
@@ -23,6 +24,7 @@ class CompanyController extends GetxController {
       String url = localStorage.read('APIURL');
 
       final company = await companyRepository.get(token: token, url: url);
+      company.bgImage = '$url/${company.bgImage}';
       return company;
     } catch (e) {
       throw '$e';

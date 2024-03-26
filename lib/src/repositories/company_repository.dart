@@ -9,7 +9,7 @@ class CompanyRepository extends GetxController {
 
   Future<CompanyModel> get({required String token, required String url}) async {
     try {
-      final apiUrl = Uri.parse('$url/check_price_params');
+      final apiUrl = Uri.parse('$url/datasnap/rest/tds/check_price_params');
 
       var response = await http.get(apiUrl,
           headers: {'Content-Type': 'application/json', 'Token': token});

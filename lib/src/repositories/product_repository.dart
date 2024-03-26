@@ -12,7 +12,7 @@ class ProductRepository extends GetxController {
       required String token,
       required String url}) async {
     try {
-      final apiUrl = Uri.parse('$url/check_price/$code');
+      final apiUrl = Uri.parse('$url/datasnap/rest/tds/check_price/$code');
 
       var response = await http.get(apiUrl,
           headers: {'Content-Type': 'application/json', 'Token': token});

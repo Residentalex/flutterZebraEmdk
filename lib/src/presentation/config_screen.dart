@@ -62,34 +62,6 @@ class ConfigScreen extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 5,
-                    child: TextFieldSection(
-                      controller: controller.imageController,
-                      label: "Imagen",
-                      hint: "URL de la imagen",
-                      readOnly: true,
-                      validator: (value) =>
-                          TValidator.validateEmptyText('URL', value),
-                      inputType: TextInputType.name,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                    child: TextButton.icon(
-                        onPressed: () {},
-                        icon: Icon(Icons.upload),
-                        label: Text('Buscar')),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
               SizedBox(
                 width: double.maxFinite,
                 child: CustomElevatedButton(
