@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_zebra_emdk/src/utils/constants/image_string.dart';
 import 'package:flutter_zebra_emdk/src/utils/validators/validation.dart';
+import 'package:get/get.dart';
 
 import '../controllers/user_controller.dart';
-import '../widget/custom_app_bar.dart';
+import '../routes/app_routes.dart';
 import '../widget/custom_elevated_button.dart';
 import '../widget/text_field_section.dart';
+
+import 'dart:io' show Platform, exit;
 
 class ConfigScreen extends StatelessWidget {
   const ConfigScreen({Key? key, this.isFirtTime = false}) : super(key: key);
@@ -17,15 +22,17 @@ class ConfigScreen extends StatelessWidget {
     var _formKey = GlobalKey<FormState>();
 
     return Scaffold(
-      appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(60),
-          child: CustomAppBar(navigateName: "Configuracion")),
+      backgroundColor: Colors.white,
       body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.all(20.00),
         child: Form(
           key: _formKey,
           child: ListView(
             children: [
+              Image(
+                  height: 40,
+                  image: AssetImage(TImages.logoSoluweb),
+                  fit: BoxFit.fitHeight),
               const SizedBox(
                 height: 20,
               ),
@@ -36,6 +43,7 @@ class ConfigScreen extends StatelessWidget {
                 validator: (value) =>
                     TValidator.validateEmptyText('nombre de usuario', value),
                 inputType: TextInputType.visiblePassword,
+                readOnly: true,
               ),
               const SizedBox(
                 height: 20,
@@ -72,19 +80,56 @@ class ConfigScreen extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              SizedBox(
-                width: double.maxFinite,
-                child: CustomElevatedButton(
-                    buttonName: "Actualizar",
-                    showToast: () {
-                      if (!_formKey.currentState!.validate()) {
-                        return;
-                      } else {
-                        controller.setConfig();
-                      }
-                    }),
-              ),
             ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            width: double.maxFinite,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: CustomElevatedButton(
+                      buttonName: "Actualizar",
+                      showToast: () {
+                        if (!_formKey.currentState!.validate()) {
+                          return;
+                        } else {
+                          controller.setConfig();
+                        }
+                      }),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Expanded(
+                  child: CustomElevatedButton(
+                      buttonName: "Cancelar",
+                      showToast: () {
+                        Get.toNamed(AppRoutes.home);
+                      }),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Expanded(
+                  child: CustomElevatedButton(
+                      buttonName: "Salir",
+                      showToast: () {
+                        if (Platform.isAndroid) {
+                          SystemNavigator.pop();
+                        } else if (Platform.isIOS) {
+                          exit(0);
+                        }
+                      }),
+                ),
+              ],
+            ),
           ),
         ),
       ),

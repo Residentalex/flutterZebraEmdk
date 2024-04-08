@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_zebra_emdk/src/controllers/company_controller.dart';
 import 'package:flutter_zebra_emdk/src/controllers/product_controller.dart';
 import 'package:flutter_zebra_emdk/src/data/models/product_model.dart';
+import 'package:flutter_zebra_emdk/src/utils/constants/image_string.dart';
 import 'package:flutter_zebra_emdk/src/utils/helpers/formarter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,15 +26,25 @@ class _HomeScreenState extends State<HomeScreen> {
       const EventChannel('samples.flutter.io/barcodereceived');
   String _barcodeRead = '';
   var controller = ProductController.instance;
-  var companyController = Get.put(CompanyController());
+  var companyController = CompanyController.instance;
   ProductModel product = ProductModel(name: '');
 
   bool showAppBar = false;
 
   @override
   void initState() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    Timer.periodic(Duration(seconds: 5), (timer) {
+      setState(() {
+        checkImage();
+      });
+    });
     super.initState();
     eventChannel.receiveBroadcastStream().listen(_onEvent, onError: _onError);
+  }
+
+  Future<String> checkImage() async {
+    return '';
   }
 
   void _onEvent(dynamic event) async {
@@ -56,15 +68,26 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void _startAppVisibleDown() {
+    Timer.periodic(Duration(seconds: 5), (timer) {
+      setState(() {
+        showAppBar = false;
+        timer.cancel();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onDoubleTap: () {
         setState(() {
           showAppBar = !showAppBar;
+          _startAppVisibleDown();
         });
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: showAppBar
             ? PreferredSize(
                 preferredSize: const Size.fromHeight(60),
@@ -81,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(right: 28.0, left: 28.0),
             child: FutureBuilder(
                 future: _barcodeRead.isEmpty
-                    ? null
+                    ? checkImage()
                     : controller.getProductByCode(code: _barcodeRead),
                 builder: (_, snapshot) {
                   if (_barcodeRead.isNotEmpty) {
@@ -97,9 +120,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   return (product.name == '')
                       ? Obx(
-                          () => Image(
-                              image: NetworkImage(
-                                  companyController.imageUrl.value)),
+                          () => companyController.imageUrl.value == ''
+                              ? Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image(
+                                        image: AssetImage(TImages.logoSoluweb),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text("Cargando...")
+                                    ],
+                                  ),
+                                )
+                              : Image(
+                                  image: NetworkImage(
+                                      companyController.imageUrl.value)),
                         )
                       : Checker(product: product, barcodeRead: _barcodeRead);
                 }),

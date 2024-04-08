@@ -1,5 +1,5 @@
 include ':app'
-include ':com.symbol.emdk'
+//include ':com.symbol.emdk'
 
 def flutterProjectRoot = rootProject.projectDir.parentFile.toPath()
 

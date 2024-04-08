@@ -12,7 +12,6 @@ class CustomElevatedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-          //backgroundColor: ColorSchema.primaryColor,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
       onPressed: () => showToast(),

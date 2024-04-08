@@ -6,12 +6,15 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../repositories/user_repositories.dart';
+import 'company_controller.dart';
 
 class AuthenticationController extends GetxController {
   static AuthenticationController get instance => Get.find();
 
   final localStorage = GetStorage();
   var userRepository = UserRepository.instance;
+  var companyController = CompanyController.instance;
+
   TextEditingController tokenController = TextEditingController();
   TextEditingController urlController = TextEditingController();
   TextEditingController userController = TextEditingController();
@@ -20,7 +23,7 @@ class AuthenticationController extends GetxController {
 
   @override
   void onReady() {
-    userController.text = localStorage.read('USERNAME') ?? '';
+    userController.text = localStorage.read('USERNAME') ?? 'Admin';
     passwordController.text = localStorage.read('PASSWORD') ?? '';
     tokenController.text = localStorage.read('TOKEN') ?? '';
     urlController.text = localStorage.read('APIURL') ?? '';
@@ -43,18 +46,22 @@ class AuthenticationController extends GetxController {
     }
   }
 
-  void setConfig() {
+  void setConfig() async {
     try {
-      localStorage.write('PASSWORD', passwordController.text);
+      var company = await companyController.getCompany(
+          apitoken: tokenController.text, apiurl: urlController.text);
 
-      localStorage.write('TOKEN', tokenController.text);
-      localStorage.write('APIURL', urlController.text);
-      localStorage.write('USERNAME', userController.text);
-      localStorage.write('ISFIRSTTIME', false);
-      localStorage.save();
+      if (company.bgImage != '' && company.bgImage != null) {
+        TLoaders.successSnackBar(title: "Actualizacion completada");
+        localStorage.write('PASSWORD', passwordController.text);
 
-      TLoaders.successSnackBar(title: "Actualizacion completada");
-      Get.toNamed(AppRoutes.home);
+        localStorage.write('TOKEN', tokenController.text);
+        localStorage.write('APIURL', urlController.text);
+        localStorage.write('USERNAME', userController.text);
+        localStorage.write('ISFIRSTTIME', false);
+        localStorage.save();
+        Get.toNamed(AppRoutes.home);
+      }
     } catch (e) {
       TLoaders.errorSnackBar(title: "Verifique los datos suministrados");
     }
